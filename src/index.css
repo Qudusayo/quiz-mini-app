@@ -1,0 +1,143 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inconsolata", sans-serif;
+  --font-inter: "Inter", sans-serif;
+}
+
+:root {
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  overflow: hidden;
+}
+
+@keyframes flash-success {
+  0% {
+    background-color: #4110ae;
+  }
+  16.67% {
+    background-color: #e6c200;
+  }
+  33.33% {
+    background-color: #4110ae;
+  }
+  50% {
+    background-color: #e6c200;
+  }
+  66.67% {
+    background-color: #4110ae;
+  }
+  83.33% {
+    background-color: #e6c200;
+  }
+  100% {
+    background-color: #1cac5a;
+  }
+}
+
+@keyframes flash-error {
+  0% {
+    background-color: #4110ae;
+  }
+  16.67% {
+    background-color: #e6c200;
+  }
+  33.33% {
+    background-color: #4110ae;
+  }
+  50% {
+    background-color: #e6c200;
+  }
+  66.67% {
+    background-color: #4110ae;
+  }
+  83.33% {
+    background-color: #e6c200;
+  }
+  100% {
+    background-color: #dc2626;
+  }
+}
+
+@keyframes slide-up {
+  0% {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+.animate-flash-success::before,
+.animate-flash-success::after {
+  animation: flash-success 2s ease-in-out 1 forwards;
+}
+
+.animate-flash-error::before,
+.animate-flash-error::after {
+  animation: flash-error 2s ease-in-out 1 forwards;
+}
+
+.animate-slide-up {
+  animation: slide-up 0.5s ease-out forwards;
+  opacity: 0;
+}
+
+.animate-slide-up:nth-child(1) {
+  animation-delay: 0.25s;
+}
+.animate-slide-up:nth-child(2) {
+  animation-delay: 0.75s;
+}
+.animate-slide-up:nth-child(3) {
+  animation-delay: 1.25s;
+}
+.animate-slide-up:nth-child(4) {
+  animation-delay: 1.75s;
+}
+
+.animate-blink {
+  animation: blink 0.75s step-end infinite;
+}
+.loader {
+  width: 100%;
+  height: 4.8px;
+  display: inline-block;
+  position: relative;
+  overflow: hidden;
+}
+.loader::after {
+  content: "";
+  width: 96px;
+  height: 4.8px;
+  background: #fff;
+  position: absolute;
+  top: 0;
+  left: 0;
+  box-sizing: border-box;
+  animation: hitZak 0.6s ease-in-out infinite alternate;
+}
+
+@keyframes hitZak {
+  0% {
+    left: 0;
+    transform: translateX(-1%);
+  }
+  100% {
+    left: 100%;
+    transform: translateX(-99%);
+  }
+}
