@@ -73,7 +73,7 @@ function DailyChallenge() {
   });
 
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [score, setScore] = useState(0);
+  const [_, setScore] = useState(0);
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [showAlert, setShowAlert] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);

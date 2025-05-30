@@ -1,4 +1,3 @@
-import React from "react";
 import { useAccount, useConnect, useSignMessage } from "wagmi";
 
 export function ConnectMenu() {
