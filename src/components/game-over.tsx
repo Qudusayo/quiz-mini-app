@@ -1,4 +1,3 @@
-import { useNavigate } from "react-router";
 import { useEffect, useState } from "react";
 import { ButtonLink } from "./button-link";
 
@@ -7,7 +6,6 @@ interface GameOverProps {
 }
 
 export function GameOver({ score }: GameOverProps) {
-  const navigate = useNavigate();
   const [displayScore, setDisplayScore] = useState(0);
 
   useEffect(() => {

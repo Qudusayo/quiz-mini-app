@@ -1,5 +1,4 @@
 import { useEffect, useState, useMemo, useCallback } from "react";
-import { CircularLoader } from "../components/loader";
 import { decodeHtmlEntities } from "../../utils";
 import { Typewriter } from "../components/typewriter";
 import { Option } from "../components/quiz-option";
@@ -78,10 +77,6 @@ function QuickPlay() {
   const [isCountdownComplete, setIsCountdownComplete] = useState(false);
   const [isGameOver, setIsGameOver] = useState(false);
 
-  const progress = questions
-    ? (currentQuestionIndex / questions.length) * 100
-    : 0;
-
   const allOptions = useMemo(() => {
     if (!questions || questions.length === 0) return [];
     const currentQuestion = questions[currentQuestionIndex];
@@ -139,7 +134,9 @@ function QuickPlay() {
         setShowCorrectAnswer(true);
         // Update score when showing correct answer
         if (isCorrect && questions && questions.length > 0) {
-          const points = getQuestionPoints(questions[currentQuestionIndex].difficulty);
+          const points = getQuestionPoints(
+            questions[currentQuestionIndex].difficulty
+          );
           setScore((prev) => prev + points);
         }
       }, 1800);
@@ -160,7 +157,13 @@ function QuickPlay() {
       if (correctAnswerTimer) clearTimeout(correctAnswerTimer);
       if (nextQuestionTimer) clearTimeout(nextQuestionTimer);
     };
-  }, [selectedOption, moveToNextQuestion, isCorrect, questions, currentQuestionIndex]);
+  }, [
+    selectedOption,
+    moveToNextQuestion,
+    isCorrect,
+    questions,
+    currentQuestionIndex,
+  ]);
 
   const handleOptionClick = (option: string) => {
     if (isAnswerLocked) return;
