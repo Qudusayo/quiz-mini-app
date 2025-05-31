@@ -6,6 +6,8 @@ import { Option } from "../components/quiz-option";
 import { useQuery } from "@tanstack/react-query";
 import Alert from "../components/alert";
 import { Countdown } from "../components/countdown";
+import { Score } from "../components/score";
+import { GameOver } from "../components/game-over";
 
 interface Question {
   type: string;
@@ -23,7 +25,7 @@ interface QuizResponse {
 
 async function fetchQuestions(): Promise<Question[]> {
   const response = await fetch(
-    "https://opentdb.com/api.php?amount=30&type=multiple"
+    "https://opentdb.com/api.php?amount=5&type=multiple"
   );
   const data: QuizResponse = await response.json();
 
@@ -31,14 +33,20 @@ async function fetchQuestions(): Promise<Question[]> {
     throw new Error("Failed to fetch questions");
   }
 
-  // Sort questions by difficulty
-  return data.results.sort((a, b) => {
-    const difficultyOrder = { easy: 0, medium: 1, hard: 2 };
-    return (
-      difficultyOrder[a.difficulty as keyof typeof difficultyOrder] -
-      difficultyOrder[b.difficulty as keyof typeof difficultyOrder]
-    );
-  });
+  return data.results;
+}
+
+function getQuestionPoints(difficulty: string): number {
+  switch (difficulty) {
+    case "easy":
+      return 100;
+    case "medium":
+      return 200;
+    case "hard":
+      return 300;
+    default:
+      return 0;
+  }
 }
 
 function QuickPlay() {
@@ -49,10 +57,17 @@ function QuickPlay() {
   } = useQuery({
     queryKey: ["questions"],
     queryFn: fetchQuestions,
+    staleTime: Infinity,
+    gcTime: 24 * 60 * 60 * 1000,
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
+    refetchOnReconnect: false,
+    retry: true,
+    retryDelay: 5000,
   });
 
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [_, setScore] = useState(0);
+  const [score, setScore] = useState(0);
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [showAlert, setShowAlert] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
@@ -61,26 +76,28 @@ function QuickPlay() {
   const [isQuestionTyped, setIsQuestionTyped] = useState(false);
   const [isTyping, setIsTyping] = useState(true);
   const [isCountdownComplete, setIsCountdownComplete] = useState(false);
+  const [isGameOver, setIsGameOver] = useState(false);
 
-  const currentQuestion = questions?.[currentQuestionIndex];
   const progress = questions
     ? (currentQuestionIndex / questions.length) * 100
     : 0;
 
   const allOptions = useMemo(() => {
-    if (!currentQuestion) return [];
+    if (!questions || questions.length === 0) return [];
+    const currentQuestion = questions[currentQuestionIndex];
     return [
       currentQuestion.correct_answer,
       ...currentQuestion.incorrect_answers,
     ]
       .sort(() => Math.random() - 0.5)
       .map(decodeHtmlEntities);
-  }, [currentQuestionIndex, currentQuestion]);
+  }, [currentQuestionIndex, questions]);
 
   const decodedCorrectAnswer = useMemo(() => {
-    if (!currentQuestion) return "";
+    if (!questions || questions.length === 0) return "";
+    const currentQuestion = questions[currentQuestionIndex];
     return decodeHtmlEntities(currentQuestion.correct_answer);
-  }, [currentQuestion]);
+  }, [currentQuestionIndex, questions]);
 
   const moveToNextQuestion = useCallback(() => {
     if (questions && currentQuestionIndex < questions.length - 1) {
@@ -120,11 +137,20 @@ function QuickPlay() {
       // Show correct answer after animation completes (2.1 seconds)
       correctAnswerTimer = setTimeout(() => {
         setShowCorrectAnswer(true);
+        // Update score when showing correct answer
+        if (isCorrect && questions && questions.length > 0) {
+          const points = getQuestionPoints(questions[currentQuestionIndex].difficulty);
+          setScore((prev) => prev + points);
+        }
       }, 1800);
 
       // Move to next question after 5 seconds
       nextQuestionTimer = setTimeout(() => {
-        moveToNextQuestion();
+        if (questions && currentQuestionIndex === questions.length - 1) {
+          setIsGameOver(true);
+        } else {
+          moveToNextQuestion();
+        }
       }, 5000);
     }
 
@@ -134,7 +160,7 @@ function QuickPlay() {
       if (correctAnswerTimer) clearTimeout(correctAnswerTimer);
       if (nextQuestionTimer) clearTimeout(nextQuestionTimer);
     };
-  }, [selectedOption, moveToNextQuestion]);
+  }, [selectedOption, moveToNextQuestion, isCorrect, questions, currentQuestionIndex]);
 
   const handleOptionClick = (option: string) => {
     if (isAnswerLocked) return;
@@ -148,10 +174,6 @@ function QuickPlay() {
     const correct = option === decodedCorrectAnswer;
     setIsCorrect(correct);
     setIsAnswerLocked(true);
-
-    if (correct) {
-      setScore((prev) => prev + 1);
-    }
   };
 
   const handleTypingComplete = useCallback(() => {
@@ -178,6 +200,15 @@ function QuickPlay() {
     );
   }
 
+  if (!isCountdownComplete) {
+    return <Countdown onComplete={() => setIsCountdownComplete(true)} />;
+  }
+
+  if (isGameOver) {
+    return <GameOver score={score} />;
+  }
+
+  const currentQuestion = questions[currentQuestionIndex];
   if (!currentQuestion) {
     return (
       <div className="h-full flex items-center justify-center text-white">
@@ -186,16 +217,15 @@ function QuickPlay() {
     );
   }
 
-  if (!isCountdownComplete) {
-    return <Countdown onComplete={() => setIsCountdownComplete(true)} />;
-  }
-
   return (
     <div className="relative h-full">
-      <div className="absolute top-4 right-4">
-        <CircularLoader progress={progress} size={50} />
+      <div className="absolute top-4 left-4">
+        <Score value={score} />
       </div>
       <div className="absolute top-[40%] left-1/2 -translate-x-1/2 -translate-y-1/2 text-white text-center text-2xl font-semibold w-full max-w-10/12">
+        <span className="text-white text-sm font-semibold">
+          Question {currentQuestionIndex + 1} of {questions.length}
+        </span>
         <Typewriter
           text={decodeHtmlEntities(currentQuestion.question)}
           isTyping={isTyping}

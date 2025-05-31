@@ -1,1 +1,18 @@
-{}
+{
+  "frame": {
+    "version": "1",
+    "name": "MiniQuiz!",
+    "homeUrl": "https://quiz-mini-warp-app.vercel.app/",
+    "iconUrl": "https://quiz-mini-warp-app.vercel.app/logo.png",
+    "imageUrl": "https://quiz-mini-warp-app.vercel.app/framesV2/opengraph-image",
+    "buttonTitle": "🎮 Play Quiz",
+    "splashImageUrl": "https://quiz-mini-warp-app.vercel.app/logo.png",
+    "splashBackgroundColor": "#f5f0ec",
+    "requiredChains": ["eip155:8453"],
+    "requiredCapabilities": [
+      "actions.signIn",
+      "wallet.getEthereumProvider",
+      "actions.swapToken"
+    ]
+  }
+}

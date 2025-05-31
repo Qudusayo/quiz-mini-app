@@ -1,55 +1,47 @@
-import { useAccount, useConnect, useSignMessage } from "wagmi";
+import { useAccount, useConnect } from "wagmi";
+
+function shortenAddress(address: string): string {
+  return `${address.slice(0, 6)}...${address.slice(-4)}`;
+}
 
 export function ConnectMenu() {
   const { isConnected, address } = useAccount();
   const { connect, connectors } = useConnect();
 
-  if (isConnected) {
+  if (isConnected && address) {
     return (
-      <div className="text-white">
-        <div>Connected account:</div>
-        <div>{address}</div>
-        <SignButton />
+      <div className="flex items-center gap-2 absolute top-3 right-3">
+        <div className="flex items-center gap-2 pr-3 p-1.5 bg-white/10 rounded-full text-white hover:bg-white/20 transition-colors">
+          <div className="w-5 h-5 rounded-full bg-white/20 flex items-center justify-center">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="w-3 h-3"
+            >
+              <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+              <circle cx="12" cy="7" r="4" />
+            </svg>
+          </div>
+          <span className="text-sm font-medium">{shortenAddress(address)}</span>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="text-white">
+    <div className="text-white absolute top-3 right-3">
       <button
         type="button"
         onClick={() => connect({ connector: connectors[0] })}
+        className="px-3 py-1.5 bg-white/10 rounded-full text-white text-sm hover:bg-white/20 transition-colors"
       >
         Connect
       </button>
     </div>
-  );
-}
-
-function SignButton() {
-  const { signMessage, isPending, data, error } = useSignMessage();
-
-  return (
-    <>
-      <button
-        type="button"
-        onClick={() => signMessage({ message: "hello world" })}
-        disabled={isPending}
-      >
-        {isPending ? "Signing..." : "Sign message"}
-      </button>
-      {data && (
-        <div className="text-white">
-          <div>Signature</div>
-          <div>{data}</div>
-        </div>
-      )}
-      {error && (
-        <div className="text-red-500">
-          <div>Error</div>
-          <div>{error.message}</div>
-        </div>
-      )}
-    </>
   );
 }

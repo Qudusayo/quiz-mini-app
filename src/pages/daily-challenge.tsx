@@ -211,7 +211,7 @@ function DailyChallenge() {
 
   return (
     <div className="relative h-full">
-      <div className="absolute top-4 right-4">
+      <div className="absolute top-4 left-4">
         <CircularLoader progress={progress} size={50} />
       </div>
       <div className="absolute top-[40%] left-1/2 -translate-x-1/2 -translate-y-1/2 text-white text-center text-2xl font-semibold w-full max-w-10/12">
