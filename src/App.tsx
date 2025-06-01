@@ -6,6 +6,7 @@ import { Navigate, Route, Routes } from "react-router";
 import QuickPlay from "./pages/quick-play";
 import Profile from "./pages/profile";
 import Home from "./pages/home";
+import Leaderboard from "./pages/leaderboard";
 
 function App() {
   useEffect(() => {
@@ -19,6 +20,7 @@ function App() {
         <Route path="/challenge" element={<DailyChallenge />} />
         <Route path="/quick-play" element={<QuickPlay />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/leaderboard" element={<Leaderboard />} />
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </Layout>
