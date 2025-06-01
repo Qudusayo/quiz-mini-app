@@ -13,6 +13,20 @@
       "actions.signIn",
       "wallet.getEthereumProvider",
       "actions.swapToken"
-    ]
+    ],
+    "ogTitle": "Create Mini App",
+    "ogDescription": "Create Mini App",
+    "ogImageUrl": "https://vercel.com/_next/image?url=https%3A%2F%2Fassets.vercel.com%2Fimage%2Fupload%2Fv1689795055%2Fdocs-assets%2Fstatic%2Fdocs%2Fconcepts%2Ffunctions%2Fog-image%2Fog-language.png&w=3840&q=75",
+    "tagline": "Create Mini App",
+    "button": {
+      "title": "Play Now!",
+      "action": {
+        "type": "launch_frame",
+        "name": "MiniQuiz",
+        "url": "https://quiz-mini-warp-app.vercel.app",
+        "splashImageUrl": "https://quiz-mini-warp-app.vercel.app/logo.png",
+        "splashBackgroundColor": "#f5f0ec"
+      }
+    }
   }
 }
