@@ -22,7 +22,7 @@ export function Countdown({ onComplete }: CountdownProps) {
 
   return (
     <div className="fixed inset-0 flex items-center justify-center">
-      <div className="text-white text-9xl font-inter animate-pulse">
+      <div className="text-white text-9xl  animate-pulse">
         {count}
       </div>
     </div>

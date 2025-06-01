@@ -37,7 +37,7 @@ export function GameOver({ score }: GameOverProps) {
         <span className="text-white text-2xl font-medium">
           Your Final Score:
         </span>
-        <p className="text-white text-9xl font-inter">{displayScore}</p>
+        <p className="text-white text-9xl ">{displayScore}</p>
       </div>
       <ButtonLink to="/">Back to Home</ButtonLink>
     </div>

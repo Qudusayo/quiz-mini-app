@@ -44,7 +44,7 @@ export function ComeBackTomorrow({ score }: ComeBackTomorrowProps) {
           <span className="text-white text-2xl font-medium">
             Your Score Today:
           </span>
-          <p className="text-white text-9xl font-inter">{score}</p>
+          <p className="text-white text-9xl ">{score}</p>
         </div>
         <div className="space-y-4">
           <span className="text-white text-2xl font-medium">
@@ -52,21 +52,21 @@ export function ComeBackTomorrow({ score }: ComeBackTomorrowProps) {
           </span>
           <div className="flex justify-center gap-4 text-white text-4xl font-medium">
             <div className="flex flex-col items-center">
-              <span className="font-inter">
+              <span className="">
                 {timeLeft.hours.toString().padStart(2, "0")}
               </span>
               <span className="text-sm">Hours</span>
             </div>
             <span>:</span>
             <div className="flex flex-col items-center">
-              <span className="font-inter">
+              <span className="">
                 {timeLeft.minutes.toString().padStart(2, "0")}
               </span>
               <span className="text-sm">Minutes</span>
             </div>
             <span>:</span>
             <div className="flex flex-col items-center">
-              <span className="font-inter">
+              <span className="">
                 {timeLeft.seconds.toString().padStart(2, "0")}
               </span>
               <span className="text-sm">Seconds</span>

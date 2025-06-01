@@ -7,7 +7,7 @@ function Home() {
     <div className="flex flex-col gap-4 h-full items-center justify-center relative">
       <ConnectMenu />
       <CeloIcon />
-      <h1 className="text-center text-4xl font-normal text-white uppercase">
+      <h1 className="text-center text-4xl text-white uppercase font-bold">
         Welcome!
       </h1>
       <div className="flex flex-col gap-4 w-full">

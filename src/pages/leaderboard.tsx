@@ -115,7 +115,7 @@ const Leaderboard = () => {
         <ArrowBack />
         <span className="ml-2 font-semibold">Back</span>
       </Link>
-      <h1 className="text-3xl font-bold text-center mt-8 mb-5 text-white uppercase font-inter">
+      <h1 className="text-3xl font-bold text-center mt-8 mb-5 text-white uppercase ">
         Leaderboard
       </h1>
       <div className="overflow-auto border-2 border-white/40 h-[600px] flex-grow">
@@ -154,16 +154,16 @@ const Leaderboard = () => {
                       isSeparator ? "border-t-1 border-white/40" : ""
                     }`}
                   >
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-white font-inter">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-white ">
                       #{rank}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300 font-inter">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300 ">
                       {maskWalletAddress(entry.wallet_address)}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-white font-inter">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-white ">
                       {entry.score}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-white font-inter">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-white ">
                       {formatTime(entry.time_taken)}
                     </td>
                   </tr>

@@ -38,7 +38,7 @@ export function Score({ value }: ScoreProps) {
       <span className="text-white text-base font-semibold uppercase leading-5">
         Score:
       </span>
-      <span className="text-white text-base font-semibold font-inter">
+      <span className="text-white text-base font-semibold ">
         {displayValue}
       </span>
     </div>

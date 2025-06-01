@@ -12,7 +12,7 @@ export function ConnectMenu() {
     return (
       <div className="flex items-center gap-2 absolute top-3 right-3">
         <div className="flex items-center gap-2 pr-3 p-1.5 bg-white/10 rounded-full text-white hover:bg-white/20 transition-colors">
-          <div className="w-5 h-5 rounded-full bg-white/20 flex items-center justify-center">
+          <div className="size-8 rounded-full bg-white/20 flex items-center justify-center">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
@@ -21,13 +21,13 @@ export function ConnectMenu() {
               strokeWidth="2"
               strokeLinecap="round"
               strokeLinejoin="round"
-              className="w-3 h-3"
+              className="size-5"
             >
               <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
               <circle cx="12" cy="7" r="4" />
             </svg>
           </div>
-          <span className="text-sm font-medium">{shortenAddress(address)}</span>
+          <span className="font-medium">{shortenAddress(address)}</span>
         </div>
       </div>
     );
@@ -38,7 +38,7 @@ export function ConnectMenu() {
       <button
         type="button"
         onClick={() => connect({ connector: connectors[0] })}
-        className="px-3 py-1.5 bg-white/10 rounded-full text-white text-sm hover:bg-white/20 transition-colors"
+        className="px-3 py-1.5 bg-white/10 rounded-full text-white hover:bg-white/20 transition-colors"
       >
         Connect
       </button>
