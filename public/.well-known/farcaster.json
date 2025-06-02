@@ -11,7 +11,7 @@
     "splashImageUrl": "https://mini-quiz-app.qudusayo.pro/logo.png",
     "splashBackgroundColor": "#3b08ac",
     "homeUrl": "https://mini-quiz-app.qudusayo.pro",
-    "subtitle": "Test your knowledge with MiniQuiz",
+    "subtitle": "Earn rewards playing MiniQuiz",
     "description": "Play MiniQuiz and test your knowledge and earn rewards.",
     "primaryCategory": "social",
     "tags": ["rewards", "leaderboard", "quiz", "earn", "learn"],
@@ -21,8 +21,9 @@
       "wallet.getEthereumProvider",
       "actions.composeCast"
     ],
+    "buttonTitle": "🎮 Play Now!",
     "heroImageUrl": "https://mini-quiz-app.qudusayo.pro/og.png",
-    "tagline": "Test your knowledge with MiniQuiz",
+    "tagline": "Earn rewards playing MiniQuiz",
     "ogTitle": "MiniQuiz",
     "ogDescription": "Play MiniQuiz and test your knowledge and earn rewards.",
     "ogImageUrl": "https://mini-quiz-app.qudusayo.pro/logo.png"
