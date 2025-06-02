@@ -76,6 +76,11 @@ const rewardWinners = async (winners: string[]) => {
 };
 
 const handler: ApiHandler = async (req, res) => {
+  const authHeader = req.headers.authorization;
+  if (!authHeader || authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
+    return res.status(401).json({ error: "Unauthorized" });
+  }
+
   try {
     const yesterday = new Date();
     yesterday.setDate(yesterday.getDate() - 1);
