@@ -1,30 +1,31 @@
 {
+  "accountAssociation": {
+    "header": "eyJmaWQiOjk0NzY0OCwidHlwZSI6ImN1c3RvZHkiLCJrZXkiOiIweDZhMGVjNDQxYjE5YkUwMzlBNTViQ2U5OGQ4RDk3Nzg1NTczMjg0MzcifQ",
+    "payload": "eyJkb21haW4iOiJtaW5pLXF1aXotYXBwLnF1ZHVzYXlvLnBybyJ9",
+    "signature": "MHgxYjE4NGEzNDg3MmI5YjFkNDJjMjVmNzMxNWVmODI4OGViMWI3MTYwY2Y3ODMxMWFhY2ViOTA3ZmU0MDY2OTc0Njc5Y2RjN2I1ZjNhOGRjMDU3NDAyZTE5ODZlZmY2ZTBhMTYyZTZmZDA0ZWMyNzY1MmIzNGNiMWZlMTVlYzY4MTFi"
+  },
   "frame": {
     "version": "1",
-    "name": "MiniQuiz!",
-    "homeUrl": "https://quiz-mini-warp-app.vercel.app/",
-    "iconUrl": "https://quiz-mini-warp-app.vercel.app/logo.png",
-    "imageUrl": "https://quiz-mini-warp-app.vercel.app/framesV2/opengraph-image",
+    "name": "MiniQuiz",
+    "homeUrl": "https://mini-quiz-app.qudusayo.pro/",
+    "iconUrl": "https://mini-quiz-app.qudusayo.pro/logo.png",
+    "imageUrl": "https://mini-quiz-app.qudusayo.pro/framesV2/opengraph-image",
     "buttonTitle": "🎮 Play Quiz",
-    "splashImageUrl": "https://quiz-mini-warp-app.vercel.app/logo.png",
+    "splashImageUrl": "https://mini-quiz-app.qudusayo.pro/logo.png",
     "splashBackgroundColor": "#f5f0ec",
     "requiredChains": ["eip155:8453"],
-    "requiredCapabilities": [
-      "actions.signIn",
-      "wallet.getEthereumProvider",
-      "actions.swapToken"
-    ],
-    "ogTitle": "Create Mini App",
-    "ogDescription": "Create Mini App",
-    "ogImageUrl": "https://vercel.com/_next/image?url=https%3A%2F%2Fassets.vercel.com%2Fimage%2Fupload%2Fv1689795055%2Fdocs-assets%2Fstatic%2Fdocs%2Fconcepts%2Ffunctions%2Fog-image%2Fog-language.png&w=3840&q=75",
-    "tagline": "Create Mini App",
+    "requiredCapabilities": ["actions.signIn", "wallet.getEthereumProvider"],
+    "ogTitle": "MiniQuiz",
+    "ogDescription": "Play MiniQuiz",
+    "ogImageUrl": "https://mini-quiz-app.qudusayo.pro/logo.png",
+    "tagline": "Play MiniQuiz",
     "button": {
-      "title": "Play Now!",
+      "title": "🎮 Play Now!",
       "action": {
         "type": "launch_frame",
         "name": "MiniQuiz",
-        "url": "https://quiz-mini-warp-app.vercel.app",
-        "splashImageUrl": "https://quiz-mini-warp-app.vercel.app/logo.png",
+        "url": "https://mini-quiz-app.qudusayo.pro",
+        "splashImageUrl": "https://mini-quiz-app.qudusayo.pro/logo.png",
         "splashBackgroundColor": "#f5f0ec"
       }
     }
