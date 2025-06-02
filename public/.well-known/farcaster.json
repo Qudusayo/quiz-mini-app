@@ -7,27 +7,24 @@
   "frame": {
     "version": "1",
     "name": "MiniQuiz",
-    "homeUrl": "https://mini-quiz-app.qudusayo.pro/",
     "iconUrl": "https://mini-quiz-app.qudusayo.pro/logo.png",
-    "imageUrl": "https://mini-quiz-app.qudusayo.pro/framesV2/opengraph-image",
-    "buttonTitle": "🎮 Play Quiz",
     "splashImageUrl": "https://mini-quiz-app.qudusayo.pro/logo.png",
-    "splashBackgroundColor": "#f5f0ec",
+    "splashBackgroundColor": "#3b08ac",
+    "homeUrl": "https://mini-quiz-app.qudusayo.pro",
+    "subtitle": "Test your knowledge with MiniQuiz",
+    "description": "Play MiniQuiz and test your knowledge and earn rewards.",
+    "primaryCategory": "social",
+    "tags": ["rewards", "leaderboard", "quiz", "earn", "learn"],
     "requiredChains": ["eip155:42220"],
-    "requiredCapabilities": ["actions.signIn", "wallet.getEthereumProvider"],
+    "requiredCapabilities": [
+      "actions.ready",
+      "wallet.getEthereumProvider",
+      "actions.composeCast"
+    ],
+    "heroImageUrl": "https://mini-quiz-app.qudusayo.pro/og.png",
+    "tagline": "Test your knowledge with MiniQuiz",
     "ogTitle": "MiniQuiz",
-    "ogDescription": "Play MiniQuiz",
-    "ogImageUrl": "https://mini-quiz-app.qudusayo.pro/logo.png",
-    "tagline": "Play MiniQuiz",
-    "button": {
-      "title": "🎮 Play Now!",
-      "action": {
-        "type": "launch_frame",
-        "name": "MiniQuiz",
-        "url": "https://mini-quiz-app.qudusayo.pro",
-        "splashImageUrl": "https://mini-quiz-app.qudusayo.pro/logo.png",
-        "splashBackgroundColor": "#f5f0ec"
-      }
-    }
+    "ogDescription": "Play MiniQuiz and test your knowledge and earn rewards.",
+    "ogImageUrl": "https://mini-quiz-app.qudusayo.pro/logo.png"
   }
 }
