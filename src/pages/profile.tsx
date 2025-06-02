@@ -129,7 +129,7 @@ function Profile() {
           </div>
         </div>
       </div>
-      {!isEligible && !isLoadingReward ? (
+      {isLoadingReward ? null : !isEligible && !isLoading ? (
         <div className="text-center text-gray-300 mt-4 px-4 text-balance">
           <p>
             Play the daily challenge and come back tomorrow to claim your
