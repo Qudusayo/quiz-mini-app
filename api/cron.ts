@@ -24,7 +24,7 @@ const handler: ApiHandler = async (req, res) => {
   try {
     // Get yesterday's date in YYYY-MM-DD format
     const yesterday = new Date();
-    // yesterday.setDate(yesterday.getDate() - 1);
+    yesterday.setDate(yesterday.getDate() - 1);
     const yesterdayStr = yesterday.toISOString().slice(0, 10);
 
     // Fetch top 10 winners from yesterday
