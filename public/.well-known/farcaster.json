@@ -13,7 +13,7 @@
     "buttonTitle": "🎮 Play Quiz",
     "splashImageUrl": "https://mini-quiz-app.qudusayo.pro/logo.png",
     "splashBackgroundColor": "#f5f0ec",
-    "requiredChains": ["eip155:8453"],
+    "requiredChains": ["eip155:42220"],
     "requiredCapabilities": ["actions.signIn", "wallet.getEthereumProvider"],
     "ogTitle": "MiniQuiz",
     "ogDescription": "Play MiniQuiz",
