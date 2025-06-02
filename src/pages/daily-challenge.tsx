@@ -363,7 +363,7 @@ function DailyChallenge() {
         <Button
           onClick={() => setShowEndGameModal(true)}
           variant="danger"
-          className="px-4 py-2 rounded-lg transition-colors m-0 min-h-10 w-40"
+          className="px-4 py-2 rounded-lg transition-colors m-0 min-h-10 w-32"
         >
           End Game
         </Button>
