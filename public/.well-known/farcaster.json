@@ -16,6 +16,11 @@
     "primaryCategory": "social",
     "tags": ["rewards", "leaderboard", "quiz", "earn", "learn"],
     "requiredChains": ["eip155:42220"],
+    "screenshotUrls": [
+      "https://mini-quiz-app.qudusayo.pro/screenshot1.png",
+      "https://mini-quiz-app.qudusayo.pro/screenshot2.png",
+      "https://mini-quiz-app.qudusayo.pro/screenshot3.png"
+    ],
     "requiredCapabilities": [
       "actions.ready",
       "wallet.getEthereumProvider",
