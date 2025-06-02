@@ -20,7 +20,7 @@ export function ClaimReward({ isEligible }: { isEligible: boolean }) {
   };
 
   return (
-    <div className="relative w-full mt-12">
+    <div className="relative w-full">
       <Button
         className="lg:w-3/5 w-4/5 mx-auto block text-xl font-semibold uppercase z-10 py-6"
         disabled={!isEligible}

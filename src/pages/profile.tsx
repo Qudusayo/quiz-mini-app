@@ -58,7 +58,7 @@ function Profile() {
   const isEligible = userReward && Number(userReward) > 0;
 
   return (
-    <div className="relative pt-12">
+    <div className="relative py-12">
       <Link
         to="/"
         className="absolute top-4 left-4 text-white hover:text-white transition-colors text-lg flex items-center"
@@ -129,7 +129,16 @@ function Profile() {
           </div>
         </div>
       </div>
-      <ClaimReward isEligible={!!isEligible} />
+      {!isEligible && !isLoadingReward ? (
+        <div className="text-center text-gray-300 mt-4 px-4 text-balance">
+          <p>
+            Play the daily challenge and come back tomorrow to claim your
+            reward!
+          </p>
+        </div>
+      ) : (
+        <ClaimReward isEligible={!!isEligible} />
+      )}
     </div>
   );
 }
