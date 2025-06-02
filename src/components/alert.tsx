@@ -2,9 +2,11 @@ import { cn } from "../../utils";
 function Alert({
   isCorrect,
   showAlert,
+  alertText,
 }: {
   isCorrect: boolean;
   showAlert: boolean;
+  alertText?: string;
 }) {
   return (
     <div
@@ -14,7 +16,7 @@ function Alert({
         showAlert ? "translate-y-0 opacity-100" : "-translate-y-full opacity-0"
       )}
     >
-      {isCorrect ? "Correct!" : "Incorrect!"}
+      {alertText || (isCorrect ? "Correct!" : "Incorrect!")}
     </div>
   );
 }
