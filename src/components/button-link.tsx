@@ -12,7 +12,7 @@ export const ButtonLink = ({
     <div className="relative">
       <div className="relative">
         <Link to={to}>
-          <Button className="lg:w-3/5 w-4/5 mx-auto block text-lg font-semibold">
+          <Button className="lg:w-3/5 w-4/5 mx-auto block text-lg font-semibold uppercase">
             {children}
           </Button>
         </Link>

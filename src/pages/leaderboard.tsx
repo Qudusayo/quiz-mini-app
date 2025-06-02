@@ -83,15 +83,15 @@ const Leaderboard = () => {
     return `${minutes}:${remainingSeconds.toString().padStart(2, "0")}`;
   };
 
-  if (isLoadingTopTen) {
+  const renderLoading = () => {
     return (
       <div className="container mx-auto px-4 py-8">
         <div className="text-center text-white">Loading leaderboard...</div>
       </div>
     );
-  }
+  };
 
-  if (topTenError) {
+  const renderError = () => {
     return (
       <div className="container mx-auto px-4 py-8">
         <div className="text-center text-red-500">
@@ -99,7 +99,7 @@ const Leaderboard = () => {
         </div>
       </div>
     );
-  }
+  };
 
   const displayEntries =
     userRankData && userRankData.rank > 10
@@ -118,61 +118,69 @@ const Leaderboard = () => {
       <h1 className="text-3xl font-bold text-center mt-8 mb-5 text-white uppercase ">
         Leaderboard
       </h1>
-      <div className="overflow-auto border-2 border-white/40 h-[600px] flex-grow">
-        <div className="max-h-full overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-          <table className="min-w-full">
-            <thead className="sticky top-0 bg-black/50 backdrop-blur-sm">
-              <tr>
-                <th className="px-6 py-3 text-left text-sm font-medium text-gray-300 uppercase tracking-wider">
-                  Rank
-                </th>
-                <th className="px-6 py-3 text-left text-sm font-medium text-gray-300 uppercase tracking-wider">
-                  Wallet
-                </th>
-                <th className="px-6 py-3 text-left text-sm font-medium text-gray-300 uppercase tracking-wider">
-                  Score
-                </th>
-                <th className="px-6 py-3 text-left text-sm font-medium text-gray-300 uppercase tracking-wider">
-                  Time
-                </th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-white/40">
-              {displayEntries.map((entry, index) => {
-                const isCurrentUser =
-                  entry.wallet_address.toLowerCase() ===
-                  currentUserAddress?.toLowerCase();
-                const rank =
-                  isCurrentUser && userRankData ? userRankData.rank : index + 1;
-                const isSeparator =
-                  index === 10 && userRankData && userRankData.rank > 10;
+      {isLoadingTopTen ? (
+        renderLoading()
+      ) : topTenError ? (
+        renderError()
+      ) : (
+        <div className="overflow-auto border-2 border-white/40 h-[600px] flex-grow">
+          <div className="max-h-full overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+            <table className="min-w-full">
+              <thead className="sticky top-0 bg-black/50 backdrop-blur-sm">
+                <tr>
+                  <th className="px-6 py-3 text-left text-sm font-medium text-gray-300 uppercase tracking-wider">
+                    Rank
+                  </th>
+                  <th className="px-6 py-3 text-left text-sm font-medium text-gray-300 uppercase tracking-wider">
+                    Wallet
+                  </th>
+                  <th className="px-6 py-3 text-left text-sm font-medium text-gray-300 uppercase tracking-wider">
+                    Score
+                  </th>
+                  <th className="px-6 py-3 text-left text-sm font-medium text-gray-300 uppercase tracking-wider">
+                    Time
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-white/40">
+                {displayEntries.map((entry, index) => {
+                  const isCurrentUser =
+                    entry.wallet_address.toLowerCase() ===
+                    currentUserAddress?.toLowerCase();
+                  const rank =
+                    isCurrentUser && userRankData
+                      ? userRankData.rank
+                      : index + 1;
+                  const isSeparator =
+                    index === 10 && userRankData && userRankData.rank > 10;
 
-                return (
-                  <tr
-                    key={entry.wallet_address}
-                    className={`${isCurrentUser ? "bg-white/5" : ""} ${
-                      isSeparator ? "border-t-1 border-white/40" : ""
-                    }`}
-                  >
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-white ">
-                      #{rank}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300 ">
-                      {maskWalletAddress(entry.wallet_address)}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-white ">
-                      {entry.score}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-white ">
-                      {formatTime(entry.time_taken)}
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
+                  return (
+                    <tr
+                      key={entry.wallet_address}
+                      className={`${isCurrentUser ? "bg-white/5" : ""} ${
+                        isSeparator ? "border-t-1 border-white/40" : ""
+                      }`}
+                    >
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-white ">
+                        #{rank}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300 ">
+                        {maskWalletAddress(entry.wallet_address)}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-white ">
+                        {entry.score}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-white ">
+                        {formatTime(entry.time_taken)}
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };

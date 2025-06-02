@@ -2,11 +2,13 @@ import { useWriteContract, useWaitForTransactionReceipt } from "wagmi";
 import Button from "./button";
 import contractABI from "../abi.json";
 import Alert from "./alert";
+import { useEffect, useState } from "react";
 
 const CONTRACT_ADDRESS = import.meta.env.VITE_CONTRACT_ADDRESS;
 
 export function ClaimReward({ isEligible }: { isEligible: boolean }) {
   const { writeContract, isPending, data: hash, error } = useWriteContract();
+  const [showAlert, setShowAlert] = useState(false);
 
   const handleClaim = async () => {
     if (!isEligible) return;
@@ -21,11 +23,21 @@ export function ClaimReward({ isEligible }: { isEligible: boolean }) {
   const { isLoading: isConfirming, isSuccess: isConfirmed } =
     useWaitForTransactionReceipt({ hash });
 
+  useEffect(() => {
+    if (error || isConfirmed) {
+      setShowAlert(true);
+      const timer = setTimeout(() => {
+        setShowAlert(false);
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [error, isConfirmed]);
+
   return (
     <div className="relative w-full">
       <Alert
         isCorrect={!error && isConfirmed}
-        showAlert={!!error || isConfirmed}
+        showAlert={showAlert}
         alertText={isConfirmed ? "Reward claimed!" : "Error claiming reward"}
       />
       <Button
