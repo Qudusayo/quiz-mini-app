@@ -8,6 +8,7 @@ import { Countdown } from "../components/countdown";
 import { Score } from "../components/score";
 import { GameOver } from "../components/game-over";
 import Button from "../components/button";
+import { EndGameModal } from "../components/end-game-modal";
 
 interface Question {
   type: string;
@@ -78,6 +79,7 @@ function QuickPlay() {
   const [isTyping, setIsTyping] = useState(true);
   const [isCountdownComplete, setIsCountdownComplete] = useState(false);
   const [isGameOver, setIsGameOver] = useState(false);
+  const [showEndGameModal, setShowEndGameModal] = useState(false);
 
   const allOptions = useMemo(() => {
     if (!questions || questions.length === 0) return [];
@@ -188,6 +190,12 @@ function QuickPlay() {
     setIsQuestionTyped(true);
   }, []);
 
+  const handleEndGame = () => {
+    setIsGameOver(true);
+    queryClient.invalidateQueries({ queryKey: ["questions"] });
+    setShowEndGameModal(false);
+  };
+
   if (isLoading) {
     return (
       <div className="h-full flex flex-col items-center justify-center w-fit mx-auto">
@@ -229,18 +237,9 @@ function QuickPlay() {
       <div className="absolute top- flex flex-row justify-between items-center w-full p-4">
         <Score value={score} />
         <Button
-          onClick={() => {
-            if (
-              window.confirm(
-                "Are you sure you want to end the game? Your current score will be saved."
-              )
-            ) {
-              setIsGameOver(true);
-              queryClient.invalidateQueries({ queryKey: ["questions"] });
-            }
-          }}
+          onClick={() => setShowEndGameModal(true)}
           variant="danger"
-          className="px-4 py-2 rounded-lg transition-colors m-0"
+          className="px-4 py-2 rounded-lg transition-colors m-0 min-h-10 w-40"
         >
           End Game
         </Button>
@@ -274,6 +273,12 @@ function QuickPlay() {
         </div>
       )}
       <Alert isCorrect={isCorrect} showAlert={showAlert} />
+      {showEndGameModal && (
+        <EndGameModal
+          onConfirm={handleEndGame}
+          onCancel={() => setShowEndGameModal(false)}
+        />
+      )}
     </div>
   );
 }

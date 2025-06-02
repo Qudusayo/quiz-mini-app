@@ -11,6 +11,7 @@ import { ComeBackTomorrow } from "../components/come-back-tomorrow";
 import { useAccount } from "wagmi";
 import { supabase } from "../../supabase";
 import Button from "../components/button";
+import { EndGameModal } from "../components/end-game-modal";
 
 interface Question {
   type: string;
@@ -157,6 +158,7 @@ function DailyChallenge() {
   const [isGameOver, setIsGameOver] = useState(false);
   const [hasScored, setHasScored] = useState(false);
   const [elapsedTime, setElapsedTime] = useState(0);
+  const [showEndGameModal, setShowEndGameModal] = useState(false);
 
   const currentQuestion = questions?.[currentQuestionIndex];
 
@@ -296,6 +298,14 @@ function DailyChallenge() {
     setIsQuestionTyped(true);
   }, []);
 
+  const handleEndGame = () => {
+    setIsGameOver(true);
+    if (address) {
+      submitScoreMutation({ address, score, elapsedTime });
+    }
+    setShowEndGameModal(false);
+  };
+
   if (isCheckingScore) {
     return (
       <div className="h-full flex flex-col items-center justify-center w-fit mx-auto">
@@ -351,20 +361,9 @@ function DailyChallenge() {
       <div className="absolute top- flex flex-row justify-between items-center w-full p-4">
         <Score value={score} elapsedTime={elapsedTime} />
         <Button
-          onClick={() => {
-            if (
-              window.confirm(
-                "Are you sure you want to end the game? Your current score will be saved."
-              )
-            ) {
-              setIsGameOver(true);
-              if (address) {
-                submitScoreMutation({ address, score, elapsedTime });
-              }
-            }
-          }}
+          onClick={() => setShowEndGameModal(true)}
           variant="danger"
-          className="px-4 py-2 rounded-lg transition-colors m-0"
+          className="px-4 py-2 rounded-lg transition-colors m-0 min-h-10 w-40"
         >
           End Game
         </Button>
@@ -398,6 +397,12 @@ function DailyChallenge() {
         </div>
       )}
       <Alert isCorrect={isCorrect} showAlert={showAlert} />
+      {showEndGameModal && (
+        <EndGameModal
+          onConfirm={handleEndGame}
+          onCancel={() => setShowEndGameModal(false)}
+        />
+      )}
     </div>
   );
 }
