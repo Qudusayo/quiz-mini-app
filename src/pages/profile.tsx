@@ -41,13 +41,21 @@ async function fetchUserScores(address: string) {
 function Profile() {
   const { address } = useAccount();
 
-  const { data: scores, isLoading } = useQuery({
+  const {
+    data: scores,
+    isLoading,
+    refetch: refetchScores,
+  } = useQuery({
     queryKey: ["user-scores", address],
     queryFn: () => (address ? fetchUserScores(address) : null),
     enabled: !!address,
   });
 
-  const { data: userReward, isLoading: isLoadingReward } = useReadContract({
+  const {
+    data: userReward,
+    isLoading: isLoadingReward,
+    refetch: refetchReward,
+  } = useReadContract({
     address: CONTRACT_ADDRESS as `0x${string}`,
     abi: contractABI,
     functionName: "getUserReward",
@@ -56,6 +64,11 @@ function Profile() {
   });
 
   const isEligible = userReward && Number(userReward) > 0;
+
+  const handleRefresh = () => {
+    refetchScores();
+    refetchReward();
+  };
 
   return (
     <div className="relative py-12">
@@ -129,16 +142,18 @@ function Profile() {
           </div>
         </div>
       </div>
-      {isLoadingReward ? null : !isEligible && !isLoading ? (
-        <div className="text-center text-gray-300 mt-4 px-4 text-balance">
-          <p>
-            Play the daily challenge and come back tomorrow to claim your
-            reward!
-          </p>
-        </div>
-      ) : (
-        <ClaimReward isEligible={!!isEligible} />
-      )}
+      {isLoadingReward
+        ? null
+        : !isEligible &&
+          !isLoading && (
+            <div className="text-center text-gray-300 mt-4 px-4 text-balance">
+              <p>
+                Play the daily challenge and come back tomorrow to claim your
+                reward!
+              </p>
+            </div>
+          )}
+      <ClaimReward isEligible={!!isEligible} onRefresh={handleRefresh} />
     </div>
   );
 }
