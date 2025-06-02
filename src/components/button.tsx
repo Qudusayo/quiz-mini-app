@@ -1,17 +1,13 @@
 import { cn } from "../../utils";
 import { useState } from "react";
 
-interface ButtonProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   isCorrect?: boolean;
   isIncorrect?: boolean;
+  variant?: "danger";
 }
 
-const Button = ({
-  isCorrect,
-  isIncorrect,
-  ...props
-}: ButtonProps) => {
+const Button = ({ isCorrect, isIncorrect, ...props }: ButtonProps) => {
   const [isFlashing, setIsFlashing] = useState(false);
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -30,6 +26,7 @@ const Button = ({
         isFlashing && isIncorrect && "animate-flash-error",
         isCorrect && "before:bg-[#1cac5a] after:bg-[#1cac5a]",
         isIncorrect && "before:bg-[#dc2626] after:bg-[#dc2626]",
+        props.variant === "danger" && "before:bg-[#dc2626] after:bg-[#dc2626]",
         props.className
       )}
     >

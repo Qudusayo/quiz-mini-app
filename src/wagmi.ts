@@ -1,14 +1,12 @@
 import { farcasterFrame } from "@farcaster/frame-wagmi-connector";
 import { http, createConfig } from "wagmi";
-import { mainnet, celoAlfajores } from "wagmi/chains";
-import { injected } from "wagmi/connectors";
+import { celo } from "wagmi/chains";
 
 export const config = createConfig({
-  chains: [celoAlfajores, mainnet],
-  connectors: [injected(), farcasterFrame()],
+  chains: [celo],
+  connectors: [farcasterFrame()],
   transports: {
-    [celoAlfajores.id]: http(),
-    [mainnet.id]: http(),
+    [celo.id]: http(),
   },
 });
 

@@ -1,5 +1,4 @@
 import { useEffect, useState, useMemo, useCallback } from "react";
-import { CircularLoader } from "../components/loader";
 import { decodeHtmlEntities } from "../../utils";
 import { Typewriter } from "../components/typewriter";
 import { Option } from "../components/quiz-option";
@@ -11,6 +10,7 @@ import { GameOver } from "../components/game-over";
 import { ComeBackTomorrow } from "../components/come-back-tomorrow";
 import { useAccount } from "wagmi";
 import { supabase } from "../../supabase";
+import Button from "../components/button";
 
 interface Question {
   type: string;
@@ -30,7 +30,7 @@ async function fetchQuestionsByDifficulty(
   difficulty: string
 ): Promise<Question[]> {
   const response = await fetch(
-    `https://opentdb.com/api.php?amount=1&type=multiple&difficulty=${difficulty}`
+    `https://opentdb.com/api.php?amount=5&type=multiple&difficulty=${difficulty}`
   );
   const data: QuizResponse = await response.json();
 
@@ -46,16 +46,14 @@ const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 async function fetchQuestions(): Promise<Question[]> {
   try {
-    // Fetch questions sequentially with delays
     const easyQuestions = await fetchQuestionsByDifficulty("easy");
-    await delay(5000); // Wait 3 seconds
+    await delay(5000);
 
     const mediumQuestions = await fetchQuestionsByDifficulty("medium");
-    await delay(5000); // Wait 3 seconds
+    await delay(5000);
 
     const hardQuestions = await fetchQuestionsByDifficulty("hard");
 
-    // Combine all questions in order of difficulty
     return [...easyQuestions, ...mediumQuestions, ...hardQuestions];
   } catch (error) {
     throw new Error("Failed to fetch questions");
@@ -65,22 +63,25 @@ async function fetchQuestions(): Promise<Question[]> {
 async function submitScore({
   address,
   score,
+  elapsedTime,
 }: {
   address: string;
   score: number;
+  elapsedTime: number;
 }) {
   const today = new Date().toISOString().slice(0, 10);
-  
-  const { error, data } = await supabase
-    .from("daily_challenges")
-    .upsert({
+
+  const { error, data } = await supabase.from("daily_challenges").upsert(
+    {
       wallet_address: address,
       score: score,
       date_played: today,
-      time_taken: 0, // TODO: Add time tracking
-    }, {
-      onConflict: 'wallet_address,date_played'
-    });
+      time_taken: elapsedTime,
+    },
+    {
+      onConflict: "wallet_address,date_played",
+    }
+  );
 
   if (error) {
     throw error;
@@ -99,7 +100,7 @@ async function checkDailyScore(address: string) {
     .single();
 
   if (error) {
-    console.error('Error checking daily score:', error);
+    console.error("Error checking daily score:", error);
     return null;
   }
 
@@ -110,10 +111,7 @@ function DailyChallenge() {
   const queryClient = useQueryClient();
   const { address } = useAccount();
 
-  const {
-    data: dailyScore,
-    isLoading: isCheckingScore,
-  } = useQuery({
+  const { data: dailyScore, isLoading: isCheckingScore } = useQuery({
     queryKey: ["daily-score", address],
     queryFn: () => checkDailyScore(address!),
     enabled: !!address,
@@ -139,8 +137,11 @@ function DailyChallenge() {
   const { mutate: submitScoreMutation } = useMutation({
     mutationFn: submitScore,
     onError: (error) => {
-      console.error('Error submitting score:', error);
-    }
+      console.error("Error submitting score:", error);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["daily-score", address] });
+    },
   });
 
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -155,11 +156,20 @@ function DailyChallenge() {
   const [isCountdownComplete, setIsCountdownComplete] = useState(false);
   const [isGameOver, setIsGameOver] = useState(false);
   const [hasScored, setHasScored] = useState(false);
+  const [elapsedTime, setElapsedTime] = useState(0);
 
   const currentQuestion = questions?.[currentQuestionIndex];
-  const progress = questions
-    ? (currentQuestionIndex / questions.length) * 100
-    : 0;
+
+  // Add timer effect
+  useEffect(() => {
+    if (!isCountdownComplete || isGameOver) return;
+
+    const timer = setInterval(() => {
+      setElapsedTime((prev) => prev + 1);
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [isCountdownComplete, isGameOver]);
 
   const allOptions = useMemo(() => {
     if (!currentQuestion) return [];
@@ -239,7 +249,7 @@ function DailyChallenge() {
           setIsGameOver(true);
           // Submit score when game is over
           if (address) {
-            submitScoreMutation({ address, score });
+            submitScoreMutation({ address, score, elapsedTime });
           }
         } else {
           moveToNextQuestion();
@@ -338,13 +348,31 @@ function DailyChallenge() {
 
   return (
     <div className="relative h-full">
-      <div className="absolute top-4 left-4">
-        <Score value={score} />
-      </div>
-      <div className="absolute top-4 right-4">
-        <CircularLoader progress={progress} size={50} />
+      <div className="absolute top- flex flex-row justify-between items-center w-full p-4">
+        <Score value={score} elapsedTime={elapsedTime} />
+        <Button
+          onClick={() => {
+            if (
+              window.confirm(
+                "Are you sure you want to end the game? Your current score will be saved."
+              )
+            ) {
+              setIsGameOver(true);
+              if (address) {
+                submitScoreMutation({ address, score, elapsedTime });
+              }
+            }
+          }}
+          variant="danger"
+          className="px-4 py-2 rounded-lg transition-colors m-0"
+        >
+          End Game
+        </Button>
       </div>
       <div className="absolute top-[40%] left-1/2 -translate-x-1/2 -translate-y-1/2 text-white text-center text-2xl font-semibold w-full max-w-10/12">
+        <span className="text-white text-sm font-semibold">
+          Question {currentQuestionIndex + 1} of {questions.length}
+        </span>
         <Typewriter
           text={decodeHtmlEntities(currentQuestion.question)}
           isTyping={isTyping}

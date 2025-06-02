@@ -2,11 +2,12 @@ import { useEffect, useState, useMemo, useCallback } from "react";
 import { decodeHtmlEntities } from "../../utils";
 import { Typewriter } from "../components/typewriter";
 import { Option } from "../components/quiz-option";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import Alert from "../components/alert";
 import { Countdown } from "../components/countdown";
 import { Score } from "../components/score";
 import { GameOver } from "../components/game-over";
+import Button from "../components/button";
 
 interface Question {
   type: string;
@@ -49,6 +50,7 @@ function getQuestionPoints(difficulty: string): number {
 }
 
 function QuickPlay() {
+  const queryClient = useQueryClient();
   const {
     data: questions,
     isLoading,
@@ -145,6 +147,7 @@ function QuickPlay() {
       nextQuestionTimer = setTimeout(() => {
         if (questions && currentQuestionIndex === questions.length - 1) {
           setIsGameOver(true);
+          queryClient.invalidateQueries({ queryKey: ["questions"] });
         } else {
           moveToNextQuestion();
         }
@@ -163,6 +166,7 @@ function QuickPlay() {
     isCorrect,
     questions,
     currentQuestionIndex,
+    queryClient,
   ]);
 
   const handleOptionClick = (option: string) => {
@@ -222,8 +226,24 @@ function QuickPlay() {
 
   return (
     <div className="relative h-full">
-      <div className="absolute top-4 left-4">
+      <div className="absolute top- flex flex-row justify-between items-center w-full p-4">
         <Score value={score} />
+        <Button
+          onClick={() => {
+            if (
+              window.confirm(
+                "Are you sure you want to end the game? Your current score will be saved."
+              )
+            ) {
+              setIsGameOver(true);
+              queryClient.invalidateQueries({ queryKey: ["questions"] });
+            }
+          }}
+          variant="danger"
+          className="px-4 py-2 rounded-lg transition-colors m-0"
+        >
+          End Game
+        </Button>
       </div>
       <div className="absolute top-[40%] left-1/2 -translate-x-1/2 -translate-y-1/2 text-white text-center text-2xl font-semibold w-full max-w-10/12">
         <span className="text-white text-sm font-semibold">

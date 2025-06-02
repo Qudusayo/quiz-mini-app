@@ -6,7 +6,7 @@ import ArrowBack from "../components/arrow-back";
 import UserIcon from "../components/user-icon";
 import contractABI from "../abi.json";
 import { zeroAddress } from "viem";
-import { celoAlfajores } from "wagmi/chains";
+import { celo } from "wagmi/chains";
 import { ClaimReward } from "../components/claim-reward";
 
 const CONTRACT_ADDRESS = import.meta.env.VITE_CONTRACT_ADDRESS;
@@ -52,7 +52,7 @@ function Profile() {
     abi: contractABI,
     functionName: "getUserReward",
     args: address ? [address] : [zeroAddress],
-    chainId: celoAlfajores.id,
+    chainId: celo.id,
   });
 
   const isEligible = userReward && Number(userReward) > 0;

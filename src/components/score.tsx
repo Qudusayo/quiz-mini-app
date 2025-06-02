@@ -2,9 +2,10 @@ import { useEffect, useState } from "react";
 
 interface ScoreProps {
   value: number;
+  elapsedTime?: number;
 }
 
-export function Score({ value }: ScoreProps) {
+export function Score({ value, elapsedTime }: ScoreProps) {
   const [displayValue, setDisplayValue] = useState(value);
 
   useEffect(() => {
@@ -33,14 +34,28 @@ export function Score({ value }: ScoreProps) {
     requestAnimationFrame(animate);
   }, [value]);
 
+  const formatTime = (seconds: number) => {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    return `${minutes}:${remainingSeconds.toString().padStart(2, "0")}`;
+  };
+
   return (
-    <div className="flex flex-row gap-2 items-center">
-      <span className="text-white text-base font-semibold uppercase leading-5">
-        Score:
-      </span>
-      <span className="text-white text-base font-semibold ">
-        {displayValue}
-      </span>
+    <div className="flex flex-col">
+      {elapsedTime !== undefined && (
+        <span className="text-white text-sm font-semibold">
+          {formatTime(elapsedTime)}
+        </span>
+      )}
+
+      <div className="flex flex-row gap-2 items-center">
+        <span className="text-white text-base font-semibold uppercase leading-5">
+          Score:
+        </span>
+        <span className="text-white text-base font-semibold ">
+          {displayValue}
+        </span>
+      </div>
     </div>
   );
 }
