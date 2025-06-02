@@ -28,10 +28,11 @@ interface QuizResponse {
 }
 
 async function fetchQuestionsByDifficulty(
-  difficulty: string
+  difficulty: string,
+  amount: number
 ): Promise<Question[]> {
   const response = await fetch(
-    `https://opentdb.com/api.php?amount=5&type=multiple&difficulty=${difficulty}`
+    `https://opentdb.com/api.php?amount=${amount}&type=multiple&difficulty=${difficulty}`
   );
   const data: QuizResponse = await response.json();
 
@@ -47,13 +48,13 @@ const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 async function fetchQuestions(): Promise<Question[]> {
   try {
-    const easyQuestions = await fetchQuestionsByDifficulty("easy");
+    const easyQuestions = await fetchQuestionsByDifficulty("easy", 1);
     await delay(5000);
 
-    const mediumQuestions = await fetchQuestionsByDifficulty("medium");
+    const mediumQuestions = await fetchQuestionsByDifficulty("medium", 2);
     await delay(5000);
 
-    const hardQuestions = await fetchQuestionsByDifficulty("hard");
+    const hardQuestions = await fetchQuestionsByDifficulty("hard", 2);
 
     return [...easyQuestions, ...mediumQuestions, ...hardQuestions];
   } catch (error) {
