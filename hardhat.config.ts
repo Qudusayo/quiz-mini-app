@@ -5,8 +5,6 @@ import * as dotenv from "dotenv";
 
 dotenv.config({ path: ".env.local" });
 
-const INFURA_PROJECT_ID = process.env.INFURA_PROJECT_ID;
-
 const config: HardhatUserConfig = {
   solidity: "0.8.28",
   networks: {
@@ -16,7 +14,7 @@ const config: HardhatUserConfig = {
       chainId: 44787,
     },
     celo: {
-      url: `https://celo-mainnet.infura.io/v3/${INFURA_PROJECT_ID}`,
+      url: process.env.CELO_RPC_URL || "",
       accounts: process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : [],
       chainId: 42220,
     },
