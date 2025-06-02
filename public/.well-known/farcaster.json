@@ -13,7 +13,7 @@
     "homeUrl": "https://mini-quiz-app.qudusayo.pro",
     "subtitle": "Earn rewards playing MiniQuiz",
     "description": "Play MiniQuiz and test your knowledge and earn rewards.",
-    "primaryCategory": "social",
+    "primaryCategory": "games",
     "tags": ["rewards", "leaderboard", "quiz", "earn", "learn"],
     "requiredChains": ["eip155:42220"],
     "screenshotUrls": [
