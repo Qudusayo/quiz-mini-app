@@ -8,6 +8,7 @@ import contractABI from "../abi.json";
 import { zeroAddress } from "viem";
 import { celo } from "wagmi/chains";
 import { ClaimReward } from "../components/claim-reward";
+import { useFarcaster } from "../contexts/farcaster-context";
 
 const CONTRACT_ADDRESS = import.meta.env.VITE_CONTRACT_ADDRESS;
 
@@ -40,6 +41,7 @@ async function fetchUserScores(address: string) {
 
 function Profile() {
   const { address } = useAccount();
+  const { farcasterUser } = useFarcaster();
 
   const {
     data: scores,
@@ -83,21 +85,33 @@ function Profile() {
       {/* Profile section */}
       <div className="flex flex-col items-center p-8 gap-3">
         {/* Profile icon with border */}
-        <div className="size-44 rounded-full border-white flex items-center justify-center bg-white/10">
-          <UserIcon className="size-36 stroke-2" />
+        <div className="size-44 rounded-full border-white flex items-center justify-center bg-white/10 overflow-hidden">
+          {farcasterUser?.pfp_url ? (
+            <img
+              src={farcasterUser.pfp_url}
+              alt={farcasterUser.display_name}
+              className="size-full object-cover"
+            />
+          ) : (
+            <UserIcon className="size-36 stroke-2" />
+          )}
         </div>
         <h1 className="text-2xl font-bold text-white mt-8 uppercase">
-          User Profile
+          {farcasterUser?.display_name || "User Profile"}
         </h1>
 
         {/* User Address */}
         <div className="w-full">
           <div className="bg-white/10 rounded-lg p-4">
-            <p className="text-gray-300 text-sm mb-1">Wallet Address</p>
+            <p className="text-gray-300 text-sm mb-1">Connected Account</p>
             <p className="text-white font-bold text-xl">
-              {address
-                ? `${address.slice(0, 6)}...${address.slice(-4)}`
-                : "Not Connected"}
+              {farcasterUser?.username && address ? (
+                <span>@{farcasterUser.username}</span>
+              ) : address ? (
+                `${address.slice(0, 6)}...${address.slice(-4)}`
+              ) : (
+                "Not Connected"
+              )}
             </p>
           </div>
         </div>

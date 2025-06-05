@@ -3,6 +3,7 @@ import { supabase } from "../../supabase";
 import { useAccount } from "wagmi";
 import { Link } from "react-router";
 import ArrowBack from "../components/arrow-back";
+import { fetchFarcasterUsers } from "../../utils";
 
 interface LeaderboardEntry {
   wallet_address: string;
@@ -63,6 +64,10 @@ const Leaderboard = () => {
   } = useQuery({
     queryKey: ["leaderboard", "top10"],
     queryFn: fetchTopTen,
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
+    refetchOnReconnect: false,
+    retry: true,
   });
 
   const { data: userRankData } = useQuery({
@@ -70,7 +75,22 @@ const Leaderboard = () => {
     queryFn: () =>
       currentUserAddress ? fetchUserRank(currentUserAddress) : null,
     enabled: !!currentUserAddress,
+    refetchOnReconnect: false,
+    retry: true,
   });
+
+  const displayEntries =
+    userRankData && userRankData.rank > 10
+      ? [...topTen, userRankData.entry]
+      : topTen;
+
+  const { data: farcasterUsers = {}, isLoading: isLoadingFarcasterUsers } =
+    useQuery({
+      queryKey: ["farcasterUsers", displayEntries.map((e) => e.wallet_address)],
+      queryFn: () =>
+        fetchFarcasterUsers(displayEntries.map((e) => e.wallet_address)),
+      enabled: displayEntries.length > 0,
+    });
 
   const maskWalletAddress = (address: string) => {
     if (!address) return "";
@@ -86,7 +106,13 @@ const Leaderboard = () => {
   const renderLoading = () => {
     return (
       <div className="container mx-auto px-4 py-8">
-        <div className="text-center text-white">Loading leaderboard...</div>
+        <div className="text-center text-white">
+          {isLoadingTopTen
+            ? "Loading leaderboard..."
+            : isLoadingFarcasterUsers
+            ? "Loading user profiles..."
+            : "Loading..."}
+        </div>
       </div>
     );
   };
@@ -101,11 +127,6 @@ const Leaderboard = () => {
     );
   };
 
-  const displayEntries =
-    userRankData && userRankData.rank > 10
-      ? [...topTen, userRankData.entry]
-      : topTen;
-
   return (
     <div className="container mx-auto px-4 py-4 h-full flex flex-col">
       <Link
@@ -118,7 +139,7 @@ const Leaderboard = () => {
       <h1 className="text-3xl font-bold text-center mt-8 mb-5 text-white uppercase ">
         Leaderboard
       </h1>
-      {isLoadingTopTen ? (
+      {isLoadingTopTen || isLoadingFarcasterUsers ? (
         renderLoading()
       ) : topTenError ? (
         renderError()
@@ -132,7 +153,7 @@ const Leaderboard = () => {
                     Rank
                   </th>
                   <th className="px-6 py-3 text-left text-sm font-medium text-gray-300 uppercase tracking-wider">
-                    Wallet
+                    Account
                   </th>
                   <th className="px-6 py-3 text-left text-sm font-medium text-gray-300 uppercase tracking-wider">
                     Score
@@ -154,6 +175,9 @@ const Leaderboard = () => {
                   const isSeparator =
                     index === 10 && userRankData && userRankData.rank > 10;
 
+                  const farcasterUser =
+                    farcasterUsers[entry.wallet_address.toLowerCase()]?.[0];
+
                   return (
                     <tr
                       key={entry.wallet_address}
@@ -165,7 +189,38 @@ const Leaderboard = () => {
                         #{rank}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300 ">
-                        {maskWalletAddress(entry.wallet_address)}
+                        {farcasterUser ? (
+                          <div className="flex items-center gap-2">
+                            {/* <div className="size-8 rounded-full bg-white/20 flex items-center justify-center overflow-hidden">
+                              {farcasterUser.pfp_url ? (
+                                <img
+                                  src={farcasterUser.pfp_url}
+                                  alt={farcasterUser.display_name}
+                                  className="size-full object-cover"
+                                />
+                              ) : (
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  viewBox="0 0 24 24"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  strokeWidth="2"
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  className="size-5"
+                                >
+                                  <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+                                  <circle cx="12" cy="7" r="4" />
+                                </svg>
+                              )}
+                            </div> */}
+                            <span className="font-medium">
+                              @{farcasterUser.username}
+                            </span>
+                          </div>
+                        ) : (
+                          maskWalletAddress(entry.wallet_address)
+                        )}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-white ">
                         {entry.score}

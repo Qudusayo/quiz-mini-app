@@ -52,7 +52,6 @@ function QuickPlay() {
     refetchOnMount: false,
     refetchOnReconnect: false,
     retry: true,
-    retryDelay: 5000,
   });
 
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);

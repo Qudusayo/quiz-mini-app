@@ -7,6 +7,7 @@ import QuickPlay from "./pages/quick-play";
 import Profile from "./pages/profile";
 import Home from "./pages/home";
 import Leaderboard from "./pages/leaderboard";
+import { FarcasterProvider } from "./contexts/farcaster-context";
 
 function App() {
   useEffect(() => {
@@ -14,16 +15,18 @@ function App() {
   }, []);
 
   return (
-    <Layout>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/challenge" element={<DailyChallenge />} />
-        <Route path="/quick-play" element={<QuickPlay />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/leaderboard" element={<Leaderboard />} />
-        <Route path="*" element={<Navigate to="/" />} />
-      </Routes>
-    </Layout>
+    <FarcasterProvider>
+      <Layout>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/challenge" element={<DailyChallenge />} />
+          <Route path="/quick-play" element={<QuickPlay />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/leaderboard" element={<Leaderboard />} />
+          <Route path="*" element={<Navigate to="/" />} />
+        </Routes>
+      </Layout>
+    </FarcasterProvider>
   );
 }
 
