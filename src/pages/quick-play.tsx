@@ -9,9 +9,9 @@ import { Score } from "../components/score";
 import { GameOver } from "../components/game-over";
 import Button from "../components/button";
 import { EndGameModal } from "../components/end-game-modal";
+import { questions as localQuestions } from "../../questions";
 
 interface Question {
-  type: string;
   difficulty: string;
   category: string;
   question: string;
@@ -19,22 +19,9 @@ interface Question {
   incorrect_answers: string[];
 }
 
-interface QuizResponse {
-  response_code: number;
-  results: Question[];
-}
-
-async function fetchQuestions(): Promise<Question[]> {
-  const response = await fetch(
-    "https://opentdb.com/api.php?amount=5&type=multiple"
-  );
-  const data: QuizResponse = await response.json();
-
-  if (data.response_code !== 0) {
-    throw new Error("Failed to fetch questions");
-  }
-
-  return data.results;
+function getRandomQuestions(count: number): Question[] {
+  const shuffled = [...localQuestions].sort(() => 0.5 - Math.random());
+  return shuffled.slice(0, count);
 }
 
 function getQuestionPoints(difficulty: string): number {
@@ -58,7 +45,7 @@ function QuickPlay() {
     error,
   } = useQuery({
     queryKey: ["questions"],
-    queryFn: fetchQuestions,
+    queryFn: () => getRandomQuestions(5),
     staleTime: Infinity,
     gcTime: 24 * 60 * 60 * 1000,
     refetchOnWindowFocus: false,
@@ -117,6 +104,8 @@ function QuickPlay() {
 
   // Handle timers when an option is selected
   useEffect(() => {
+    if (isGameOver) return;
+
     let notificationTimer: ReturnType<typeof setTimeout>;
     let hideNotificationTimer: ReturnType<typeof setTimeout>;
     let correctAnswerTimer: ReturnType<typeof setTimeout>;
@@ -169,6 +158,7 @@ function QuickPlay() {
     questions,
     currentQuestionIndex,
     queryClient,
+    isGameOver,
   ]);
 
   const handleOptionClick = (option: string) => {

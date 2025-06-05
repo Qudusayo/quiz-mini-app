@@ -12,9 +12,9 @@ import { useAccount } from "wagmi";
 import { supabase } from "../../supabase";
 import Button from "../components/button";
 import { EndGameModal } from "../components/end-game-modal";
+import { questions } from "../../questions";
 
 interface Question {
-  type: string;
   difficulty: string;
   category: string;
   question: string;
@@ -22,39 +22,23 @@ interface Question {
   incorrect_answers: string[];
 }
 
-interface QuizResponse {
-  response_code: number;
-  results: Question[];
-}
-
-async function fetchQuestionsByDifficulty(
+// Helper function to get random questions by difficulty
+function getRandomQuestionsByDifficulty(
   difficulty: string,
-  amount: number
-): Promise<Question[]> {
-  const response = await fetch(
-    `https://opentdb.com/api.php?amount=${amount}&type=multiple&difficulty=${difficulty}`
+  count: number
+): Question[] {
+  const filteredQuestions = questions.filter(
+    (q) => q.difficulty === difficulty
   );
-  const data: QuizResponse = await response.json();
-
-  if (data.response_code !== 0) {
-    throw new Error(`Failed to fetch ${difficulty} questions`);
-  }
-
-  return data.results;
+  const shuffled = [...filteredQuestions].sort(() => 0.5 - Math.random());
+  return shuffled.slice(0, count);
 }
-
-// Helper function to add delay
-const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 async function fetchQuestions(): Promise<Question[]> {
   try {
-    const easyQuestions = await fetchQuestionsByDifficulty("easy", 1);
-    await delay(5000);
-
-    const mediumQuestions = await fetchQuestionsByDifficulty("medium", 2);
-    await delay(5000);
-
-    const hardQuestions = await fetchQuestionsByDifficulty("hard", 2);
+    const easyQuestions = getRandomQuestionsByDifficulty("easy", 1);
+    const mediumQuestions = getRandomQuestionsByDifficulty("medium", 2);
+    const hardQuestions = getRandomQuestionsByDifficulty("hard", 2);
 
     return [...easyQuestions, ...mediumQuestions, ...hardQuestions];
   } catch (error) {
