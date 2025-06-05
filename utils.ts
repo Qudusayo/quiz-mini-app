@@ -12,6 +12,11 @@ export function decodeHtmlEntities(text: string) {
   return textarea.value;
 }
 
+export function maskWalletAddress(address: string, showAll = false) {
+  if (showAll) return address;
+  return `${address.slice(0, 6)}...${address.slice(-4)}`;
+}
+
 export const fetchFarcasterUsers = async (
   addresses: string[]
 ): Promise<Record<string, FarcasterUser[]>> => {

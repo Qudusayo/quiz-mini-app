@@ -13,14 +13,7 @@ import { supabase } from "../../supabase";
 import Button from "../components/button";
 import { EndGameModal } from "../components/end-game-modal";
 import { questions } from "../../questions";
-
-interface Question {
-  difficulty: string;
-  category: string;
-  question: string;
-  correct_answer: string;
-  incorrect_answers: string[];
-}
+import { Question } from "../../types";
 
 // Helper function to get random questions by difficulty
 function getRandomQuestionsByDifficulty(

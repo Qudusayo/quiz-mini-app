@@ -9,6 +9,7 @@ import { zeroAddress } from "viem";
 import { celo } from "wagmi/chains";
 import { ClaimReward } from "../components/claim-reward";
 import { useFarcaster } from "../contexts/farcaster-context";
+import { maskWalletAddress } from "../../utils";
 
 const CONTRACT_ADDRESS = import.meta.env.VITE_CONTRACT_ADDRESS;
 
@@ -108,7 +109,7 @@ function Profile() {
               {farcasterUser?.username && address ? (
                 <span>@{farcasterUser.username}</span>
               ) : address ? (
-                `${address.slice(0, 6)}...${address.slice(-4)}`
+                maskWalletAddress(address)
               ) : (
                 "Not Connected"
               )}

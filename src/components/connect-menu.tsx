@@ -1,9 +1,6 @@
 import { useAccount, useConnect } from "wagmi";
 import { useFarcaster } from "../contexts/farcaster-context";
-
-function shortenAddress(address: string): string {
-  return `${address.slice(0, 6)}...${address.slice(-4)}`;
-}
+import { maskWalletAddress } from "../../utils";
 
 export function ConnectMenu() {
   const { isConnected, address } = useAccount();
@@ -38,7 +35,7 @@ export function ConnectMenu() {
             )}
           </div>
           <span className="font-medium">
-            {farcasterUser?.username || shortenAddress(address)}
+            {farcasterUser?.username || maskWalletAddress(address)}
           </span>
         </div>
       </div>

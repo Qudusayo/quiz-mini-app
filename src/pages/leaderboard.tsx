@@ -3,7 +3,7 @@ import { supabase } from "../../supabase";
 import { useAccount } from "wagmi";
 import { Link } from "react-router";
 import ArrowBack from "../components/arrow-back";
-import { fetchFarcasterUsers } from "../../utils";
+import { fetchFarcasterUsers, maskWalletAddress } from "../../utils";
 
 interface LeaderboardEntry {
   wallet_address: string;
@@ -92,10 +92,6 @@ const Leaderboard = () => {
       enabled: displayEntries.length > 0,
     });
 
-  const maskWalletAddress = (address: string) => {
-    if (!address) return "";
-    return `${address.slice(0, 6)}...${address.slice(-4)}`;
-  };
 
   const formatTime = (seconds: number) => {
     const minutes = Math.floor(seconds / 60);

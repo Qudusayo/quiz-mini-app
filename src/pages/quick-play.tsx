@@ -10,14 +10,7 @@ import { GameOver } from "../components/game-over";
 import Button from "../components/button";
 import { EndGameModal } from "../components/end-game-modal";
 import { questions as localQuestions } from "../../questions";
-
-interface Question {
-  difficulty: string;
-  category: string;
-  question: string;
-  correct_answer: string;
-  incorrect_answers: string[];
-}
+import { Question } from "../../types";
 
 function getRandomQuestions(count: number): Question[] {
   const shuffled = [...localQuestions].sort(() => 0.5 - Math.random());
